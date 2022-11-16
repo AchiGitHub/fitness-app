@@ -11,11 +11,9 @@ import com.lifestyleservice.lifestyle.util.TransportDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class MembershipTypeServiceImpl implements MembershipTypeService {
@@ -45,7 +43,7 @@ public class MembershipTypeServiceImpl implements MembershipTypeService {
 
         membershipTypes.forEach(membershipType -> {
             MembershipTypeDto data = new MembershipTypeDto();
-            Long durationId = membershipType.getDurationId();
+            UUID durationId = membershipType.getDurationId();
             Optional<Duration> duration = durationRepository.findById(durationId);
             data.setMembershipName(membershipType.getMembershipName());
             data.setPrice(membershipType.getPrice());
@@ -62,7 +60,7 @@ public class MembershipTypeServiceImpl implements MembershipTypeService {
     }
 
     @Override
-    public boolean deleteMembershipType(Long id) {
+    public boolean deleteMembershipType(UUID id) {
         try {
             membershipRepository.deleteById(id);
             return true;
@@ -72,27 +70,31 @@ public class MembershipTypeServiceImpl implements MembershipTypeService {
     }
 
     @Override
-    public TransportDto updateMembershipType(Long id, MembershipType updateMembershipType) {
-        MembershipType membership = membershipRepository.findById(id).get();
-        String membershipName = updateMembershipType.getMembershipName();
-        Long numOfMembers = updateMembershipType.getNumberOfMembers();
-        Long price = updateMembershipType.getPrice();
-        Long duration = updateMembershipType.getDurationId();
+    public TransportDto updateMembershipType(UUID id, MembershipType updateMembershipType) {
+        try {
+            MembershipType membership = membershipRepository.findById(id).get();
+            String membershipName = updateMembershipType.getMembershipName();
+            Long numOfMembers = updateMembershipType.getNumberOfMembers();
+            Long price = updateMembershipType.getPrice();
+            UUID duration = updateMembershipType.getDurationId();
 
-        if (Objects.nonNull(membershipName)
-                && !"".equalsIgnoreCase(membershipName)) {
-            membership.setMembershipName(membershipName);
+            if (Objects.nonNull(membershipName)
+                    && !"".equalsIgnoreCase(membershipName)) {
+                membership.setMembershipName(membershipName);
+            }
+            if (Objects.nonNull(numOfMembers)) {
+                membership.setNumberOfMembers(numOfMembers);
+            }
+            if (Objects.nonNull(price)) {
+                membership.setPrice(price);
+            }
+            if (Objects.nonNull(duration)) {
+                membership.setDurationId(duration);
+            }
+            membershipRepository.save(membership);
+            return requestHelper.setResponse(membership);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Membership type not found!", e);
         }
-        if (Objects.nonNull(numOfMembers)) {
-            membership.setNumberOfMembers(numOfMembers);
-        }
-        if (Objects.nonNull(price)) {
-            membership.setPrice(price);
-        }
-        if (Objects.nonNull(duration)) {
-            membership.setDurationId(duration);
-        }
-        membershipRepository.save(membership);
-        return requestHelper.setResponse(membership);
     }
 }

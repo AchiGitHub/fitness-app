@@ -9,11 +9,12 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Getter
 @Setter
 public class MembershipTypeDto {
-    private Long id;
+    private UUID id;
     @NotNull
     private String membershipName;
     @NotNull

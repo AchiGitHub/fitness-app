@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -16,7 +17,7 @@ import javax.persistence.*;
 public class MembershipType extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private UUID id;
     @NotNull
     private String membershipName;
     @NotNull
@@ -24,5 +25,5 @@ public class MembershipType extends Auditable<String> {
     @NotNull
     private Long numberOfMembers;
     @NotNull
-    private Long durationId;
+    private UUID durationId;
 }

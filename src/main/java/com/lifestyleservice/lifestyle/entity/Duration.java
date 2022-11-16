@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -18,7 +19,7 @@ import javax.persistence.*;
 public class Duration extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private UUID id;
     @NotNull
     private DurationType durationType;
     @NotNull

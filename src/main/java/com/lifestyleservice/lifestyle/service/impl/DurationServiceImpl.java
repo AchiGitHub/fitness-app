@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class DurationServiceImpl implements DurationService {
@@ -55,12 +56,12 @@ public class DurationServiceImpl implements DurationService {
     }
 
     @Override
-    public TransportDto editDuration(Long id, Duration duration) {
+    public TransportDto editDuration(UUID id, Duration duration) {
         return null;
     }
 
     @Override
-    public boolean deleteDuration(Long id) {
+    public boolean deleteDuration(UUID id) {
         try {
             durationRepository.deleteById(id);
             return true;

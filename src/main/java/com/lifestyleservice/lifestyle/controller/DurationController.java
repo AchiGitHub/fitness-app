@@ -14,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/membership/duration")
@@ -59,7 +60,7 @@ public class DurationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteDuration(@PathVariable Long id) {
+    public ResponseEntity<Object> deleteDuration(@PathVariable UUID id) {
         if (!durationService.deleteDuration(id)) {
             throw new IllegalStateException("Duration with id" + id);
         }

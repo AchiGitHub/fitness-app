@@ -4,6 +4,8 @@ import com.lifestyleservice.lifestyle.entity.MembershipType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.UUID;
+
 @Repository
-public interface MembershipRepository extends JpaRepository<MembershipType, Long> {
+public interface MembershipRepository extends JpaRepository<MembershipType, UUID> {
 }
