@@ -49,7 +49,6 @@ public class DurationServiceImpl implements DurationService {
 
     @Override
     public TransportDto createDuration(Duration duration) {
-        System.out.println(duration);
         durationRepository.save(duration);
         TransportDto durationDto = requestHelper.setResponse(duration);
         return durationDto;
