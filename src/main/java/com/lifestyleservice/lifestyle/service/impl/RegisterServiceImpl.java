@@ -10,6 +10,7 @@ import com.lifestyleservice.lifestyle.service.RegistrationService;
 import com.lifestyleservice.lifestyle.util.RequestHelper;
 import com.lifestyleservice.lifestyle.util.TransportDto;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,13 +26,20 @@ public class RegisterServiceImpl implements RegistrationService {
     private RequestHelper requestHelper;
     private MemberRepository memberRepository;
     private MembershipRepository membershipRepository;
+    private ModelMapper modelMapper;
 
     @Autowired
-    public RegisterServiceImpl(RegistrationRepository registrationRepository, RequestHelper requestHelper, MemberRepository memberRepository, MembershipRepository membershipRepository) {
+    public RegisterServiceImpl(RegistrationRepository registrationRepository,
+                               RequestHelper requestHelper,
+                               MemberRepository memberRepository,
+                               MembershipRepository membershipRepository,
+                               ModelMapper modelMapper
+    ) {
         this.registrationRepository = registrationRepository;
         this.requestHelper = requestHelper;
         this.memberRepository = memberRepository;
         this.membershipRepository = membershipRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -44,9 +52,16 @@ public class RegisterServiceImpl implements RegistrationService {
     @Override
     public TransportDto getAllRegistrations() {
         List<Registration> allRegistrations = registrationRepository.findAll();
-        List<RegistrationDto> allRegistrationsDto = new ArrayList<>();
+        List<GetRegistrationsDto> allRegistrationsDto = new ArrayList<>();
         if (allRegistrations != null) {
-            return requestHelper.setResponse(allRegistrations);
+            allRegistrations.forEach(reg -> {
+                GetRegistrationsDto responseData = modelMapper.map(reg, GetRegistrationsDto.class);
+                List<Object> members = memberRepository.findByIdIn(List.of(reg.getUsers()));
+                responseData.setUsers(members);
+                responseData.setMembershipType(membershipRepository.findById(reg.getMembershipType()).get());
+                allRegistrationsDto.add(responseData);
+            });
+            return requestHelper.setResponse(allRegistrationsDto);
         } else {
             return requestHelper.setError(HttpStatus.NOT_FOUND, "No records found!");
         }
@@ -66,6 +81,7 @@ public class RegisterServiceImpl implements RegistrationService {
             regs.setMembershipType(membershipRepository.findById(res.get().getMembershipType()).get());
             return requestHelper.setResponse(regs);
         } catch(Exception e) {
+            log.error("Get registration error {}", e);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Registration not found!");
         }
     }
