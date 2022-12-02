@@ -10,5 +10,5 @@ import java.util.UUID;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, UUID> {
-    List<Object> findByIdIn(Collection<UUID> ids);
+    List<Member> findByIdIn(Collection<UUID> ids);
 }

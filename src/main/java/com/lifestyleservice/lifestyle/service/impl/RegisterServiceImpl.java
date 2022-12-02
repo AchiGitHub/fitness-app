@@ -2,6 +2,7 @@ package com.lifestyleservice.lifestyle.service.impl;
 
 import com.lifestyleservice.lifestyle.dto.GetRegistrationsDto;
 import com.lifestyleservice.lifestyle.dto.RegistrationDto;
+import com.lifestyleservice.lifestyle.entity.Member;
 import com.lifestyleservice.lifestyle.entity.Registration;
 import com.lifestyleservice.lifestyle.repository.MemberRepository;
 import com.lifestyleservice.lifestyle.repository.MembershipRepository;
@@ -64,9 +65,10 @@ public class RegisterServiceImpl implements RegistrationService {
     public TransportDto getRegistration(UUID id) {
         try {
             Optional<Registration> res = registrationRepository.findById(id);
-            List<Object> members = memberRepository.findByIdIn(List.of(res.get().getUsers()));
+            List<Member> members = memberRepository.findByIdIn(List.of(res.get().getUsers()));
             GetRegistrationsDto regs = new GetRegistrationsDto();
             regs.setId(res.get().getId());
+            regs.setName(res.get().getName());
             regs.setAmount(res.get().getAmount());
             regs.setUsers(members);
             regs.setStartDate(res.get().getStartDate());

@@ -68,4 +68,10 @@ public class MemberServiceImpl implements MemberService {
         }
         return requestHelper.setResponse(member);
     }
+
+    @Override
+    public TransportDto getMembersByIdList(List<UUID> ids) {
+        List<Member> members = memberRepository.findByIdIn(ids);
+        return requestHelper.setResponse(members);
+    }
 }

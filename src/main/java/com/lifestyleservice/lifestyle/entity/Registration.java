@@ -23,6 +23,8 @@ public class Registration extends Auditable<String> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     @NotNull
+    private String name;
+    @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime startDate;
     @NotNull

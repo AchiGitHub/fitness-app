@@ -14,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -56,6 +57,12 @@ public class MemberController {
             return ResponseEntity.status(res.getError().getStatus()).body(res);
         }
         return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<TransportDto> getMembersByIds(@RequestBody List<UUID> ids) {
+        TransportDto users = memberService.getMembersByIdList(ids);
+        return ResponseEntity.ok(users);
     }
 
     @PutMapping("/{id}")
