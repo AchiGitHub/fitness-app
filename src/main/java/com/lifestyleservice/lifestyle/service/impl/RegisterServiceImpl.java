@@ -54,14 +54,7 @@ public class RegisterServiceImpl implements RegistrationService {
         List<Registration> allRegistrations = registrationRepository.findAll();
         List<GetRegistrationsDto> allRegistrationsDto = new ArrayList<>();
         if (allRegistrations != null) {
-            allRegistrations.forEach(reg -> {
-                GetRegistrationsDto responseData = modelMapper.map(reg, GetRegistrationsDto.class);
-                List<Object> members = memberRepository.findByIdIn(List.of(reg.getUsers()));
-                responseData.setUsers(members);
-                responseData.setMembershipType(membershipRepository.findById(reg.getMembershipType()).get());
-                allRegistrationsDto.add(responseData);
-            });
-            return requestHelper.setResponse(allRegistrationsDto);
+            return requestHelper.setResponse(allRegistrations);
         } else {
             return requestHelper.setError(HttpStatus.NOT_FOUND, "No records found!");
         }

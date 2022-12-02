@@ -2,7 +2,6 @@ package com.lifestyleservice.lifestyle.controller;
 
 import com.lifestyleservice.lifestyle.dto.DurationDto;
 import com.lifestyleservice.lifestyle.entity.Duration;
-import com.lifestyleservice.lifestyle.exception.DurationError;
 import com.lifestyleservice.lifestyle.service.DurationService;
 import com.lifestyleservice.lifestyle.util.TransportDto;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +40,7 @@ public class DurationController {
     }
 
     @PostMapping("")
-    public ResponseEntity <Duration> createDuration(@RequestBody DurationDto durationDto) {
+    public ResponseEntity<Duration> createDuration(@RequestBody DurationDto durationDto) {
         Duration duration = modelMapper.map(durationDto, Duration.class);
         LocalDateTime now = LocalDateTime.now();
         duration.setCreatedDate(now);
